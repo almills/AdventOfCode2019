@@ -17,5 +17,24 @@ namespace RocketEquation
 
             return total;
         }
+
+        public static int CaluclateWithFuel(IEnumerable<int> masses)
+        {
+            var fleetFuel = 0;
+            foreach (int i in masses)
+            {
+                int fuel = FuelCalculator.RequiredFuel(i);
+                int totalFuel = 0;
+                while (fuel > 0)
+                {
+                    totalFuel += fuel;
+                    fuel = FuelCalculator.RequiredFuel(fuel);
+                }
+                fleetFuel += totalFuel;
+            }
+            
+
+            return fleetFuel;
+        }
     }
 }

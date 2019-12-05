@@ -14,10 +14,20 @@ namespace RocketEquationTests
         [Fact]
         public void Test1()
         {
-            var input = File.ReadAllLines("input.txt");
-            var ints = input.Select(n => Convert.ToInt32(n)).ToArray();
+            var result = FleetFuelCalculator.Calculate(GetInput());
+        }
 
-            var result = FleetFuelCalculator.Calculate(ints);
+        [Fact]
+        public void Test2()
+        {
+            var result = FleetFuelCalculator.CaluclateWithFuel(GetInput());
+        }
+
+
+        private IEnumerable<int> GetInput()
+        {
+            var input = File.ReadAllLines("input.txt");
+            return input.Select(n => Convert.ToInt32(n)).ToArray();
         }
     }
 }
