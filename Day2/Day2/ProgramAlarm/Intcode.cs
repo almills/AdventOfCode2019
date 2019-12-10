@@ -1,37 +1,66 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ProgramAlarm
 {
     public static class Intcode
     {
-        public static string Run(string input)
-        {
-            int[] values = input.Split(new char[] { ','}, StringSplitOptions.RemoveEmptyEntries).Select(s => int.Parse(s)).ToArray();
+        private static readonly int MAGIC_NUMBER = 19690720;
 
-            for(int i = 0; i < values.Length; i += 4)
-            {
-                switch(values[i])
+        public static int Run(IList<int> output, int noun, int verb)
+        {
+            output[1] = noun;
+            output[2] = verb;
+
+            for (int i = 0; i < output.Count; i += 4)
+            {           
+                switch (output[i])
                 {
+                    case 99:
+                        return output[0];
                     case 1:
-                        var posToUpdate = values[i + 3];
-                        var a = values[i + 1];
-                        var b = values[i + 2];
-                        values[posToUpdate] = values[a] + values[b];
+                        var posToUpdate = output[i + 3];
+                        var a = output[i + 1];
+                        var b = output[i + 2];
+                        output[posToUpdate] = output[a] + output[b];
                         break;
                     case 2:
-                        posToUpdate = values[i + 3];
-                        a = values[i + 1];
-                        b = values[i + 2];
-                        values[posToUpdate] = values[a] * values[b];
+                        posToUpdate = output[i + 3];
+                        a = output[i + 1];
+                        b = output[i + 2];
+                        output[posToUpdate] = output[a] * output[b];
                         break;
-                    case 99:
-                        string.Join(',', values);
-                        break;
-                }   
+                }
             }
 
-            return string.Join(',', values);
+            return output[0];
+        }
+
+        public static int Run(string input, int noun, int verb)
+        {
+            int[] values = input.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => int.Parse(s)).ToArray();
+
+            return Run(values, noun, verb);
+        }
+
+
+        public static int DumbRun(string input)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                for(int j = 0; j < 100; j++)
+                {
+                    var result = Run(input, i, j);
+
+                    if(result == MAGIC_NUMBER)
+                    {
+                        return 100 * i + j;
+                    }
+                }
+            }
+
+            return 0;
         }
     }
 }
