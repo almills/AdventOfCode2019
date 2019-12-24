@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Day3;
 using FluentAssertions;
 using Xunit;
@@ -15,6 +16,16 @@ namespace Day3.UnitTests
             var actualDistance = ManhattanDistance.Calculate(wire1, wire2);
 
             actualDistance.Should().Be(expectedDistance, because: "It should");
+        }
+
+        [Fact]
+        public void Test2()
+        {
+            var input = File.ReadAllLines("input.txt");
+
+            var actualDistance = ManhattanDistance.Calculate(input[0], input[1]);
+
+            actualDistance.Should().Be(0, because: "It should");
         }
     }
 }
